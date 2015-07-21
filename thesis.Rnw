@@ -1,0 +1,259 @@
+% This template for Sweave/knitr document building was  created by 
+% Sancar Adali
+% This template was originally by R. Jacob Vogelstein
+% Updated on March 1, 2010 by Noah J. Cowan
+
+% Your first task should be to remove packages you are not going to need
+\documentclass[12pt,oneside,final]{thesis}
+
+%\usepackage[utf8]{inputenc}
+\usepackage{cite}
+%
+\usepackage{amssymb,amsmath,amsthm,amscd}
+\usepackage{pgfplots}
+%\usetikzlibrary{plotmarks}
+\pgfplotsset{compat=newest} 
+%\pgfplotsset{plot coordinates/math parser=false}
+%\usetikzlibrary{external}
+%\tikzexternalize % activate!
+%\tikzset{external/system call={pdflatex \tikzexternalcheckshellescape -halt-on-error -interaction=batchmode -jobname "\image" "\texsource"}}
+%\tikzset{external/force remake=true} 
+
+
+\usepackage{graphicx}
+\usepackage{subcaption}
+
+\usepackage{ mathrsfs, bm}
+\usepackage[pdfa]{hyperref}
+
+\usepackage{algorithm2e}
+\usepackage{url}
+\renewcommand{\thesubfigure}{}
+% justifying
+\usepackage{ragged2e}
+
+
+%include the subdirectories where you store the figures, diagrams,graphs  with relative paths
+\graphicspath{{./}{./graphs/}{./figures/}{./../JOFC-GraphMatch/graphs/}{./../JOFC_MatchDetect/graphs/}{./../SeededGraphMatch/graphs/}{./../DataFusion/}{./../DataFusion/graphs/}{./../DataFusion-graphmatch/graphs/}{./../VertexCorrespondence/graphs/}}
+
+\usepackage{fixltx2e}
+\usepackage{array}
+% wrapfig is fragile: use sparingly
+\usepackage{wrapfig} 
+\usepackage{cmbright} %clean look
+%\usepackage{times}  % Use this for ugly fonts
+%\usepackage{ccfonts,eulervm} %Not bad looks nice for serif
+%\usepackage[T1]{fontenc}
+%\usepackage[urw-garamond]{mathdesign}
+%\usepackage{garamondx}
+%\usepackage[lf]{venturis} %% lf option gives lining figures as default; 
+  		  %% remove option to get oldstyle figures as default
+%\usepackage[T1]{fontenc}
+%\usepackage[garamond]{mathdesign}
+%\usepackage[sfdefault]{quattrocento}
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc}
+
+
+
+
+%\usepackage[none]{hyphenat}
+
+\usepackage{verbatim}
+
+\usepackage{multirow}
+
+\usepackage{fancyhdr}    % Use nice looking headers along with the required footer page numbers   
+%\usepackage[hypertex]{hyperref}
+\usepackage{lscape} 
+%Define the header/footer style
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{15pt}
+\lhead{\leftmark}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\fancypagestyle{plain}{% Redefine ``plain'' style for chapter boundaries
+\fancyhf{} % clear all header and footer fields
+\fancyfoot[C]{\thepage} % except the center
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}}
+
+\newtheorem{thm}{Theorem}
+\newtheorem{cor}{Corollary}
+\newtheorem{lem}{Lemma}
+\newtheorem{defn}{Definition}
+
+\usepackage[refpage]{nomencl}
+\renewcommand{\nomname}{List of Notations}
+\renewcommand*{\pagedeclaration}[1]{\unskip\dotfill\hyperpage{#1}}
+%\DeclareTextCommand{\nobreakspace}{T1}{\leavevmode\nobreak\ }
+
+\makenomenclature
+
+\usepackage{makeidx}
+\makeindex
+
+%shorthand commands
+\input{common.tex}
+
+%The following two commands might not be necessary. 
+%They were added during my efforts to create a PDF-1/A compatible pdf file which is required by the JHU library for thesis submissions.
+%PDF compliance
+\input {glyphtounicode-cmr.tex}
+\pdfgentounicode=1
+
+\def\Title{Joint Optimization of Fidelity and Commensurability\\ for Manifold Alignment and Graph Matching}
+\def\Author{Sancar Adali}
+\def\Subject{Dissertation Submitted for Doctoral Degree}
+\def\Keywords{thesis,Multidimensional Scaling,Graph Matching,Fidelity and Commensurability}
+
+%The following sections were added to create a PDF-1/A compatible pdf file including metadata and other features which is required by the JHU library for thesis submissions.
+%***************************************************************************
+% \convertDate converts D:20080419103507+02'00' to 2008-04-19T10:35:07+02:00
+%___________________________________________________________________________
+
+ 
+%\def\pdfcreationdate{2013-03-21T10:35:07+05:00}
+
+%*********
+% XMP data
+%_________
+
+\usepackage{hyperxmp}
+
+
+% ----------------------------------------------
+% Add metadata
+
+\hypersetup{% 
+       pdftitle={\Title},
+       pdfauthor={\Author},
+       pdfauthortitle={},
+       pdfcopyright={Copyright (C) 2014, Sancar Adali},
+       pdfsubject={\Subject},
+       pdfkeywords={\Keywords},
+       pdflicenseurl={},
+       pdfcaptionwriter={},
+       pdfcontactaddress={Johns Hopkins University},
+       pdfcontactcity={Baltimore},
+       pdfcontactpostcode={21218},
+       pdfcontactcountry={USA},
+       pdfcontactemail={sadali1@jhu.edu},
+       pdfcontacturl={http://www.ams.jhu.edu/~adali},
+       pdflang={en},
+       bookmarksopen=true,
+       bookmarksopenlevel=3,
+       hypertexnames=false,
+       linktocpage=true,
+       plainpages=false,
+       breaklinks
+     }
+
+
+
+
+
+
+%\usepackage[T1]{fontenc}
+%SA: This package is not necessary unless you want to create a slideshow-like  plot window like I did.
+\usepackage{animate}
+%\tolerance=10000
+
+%\makeglossary % enable the glossary
+% SA: The following package makes subtle corrections to the rendering of the document. See http://www.khirevich.com/latex/microtype/
+%\usepackage[protrusion=true,final,tracking=true,kerning=true,spacing=true,factor=1100,stretch=10,shrink=10]{microtype}
+
+\begin{document}
+
+<<include=FALSE>>=
+opts_chunk$set(concordance=TRUE,eval=FALSE)
+@
+
+
+\title{Joint Optimization of Fidelity and Commensurability\\ for Manifold Alignment and Graph Matching}
+\author{Sancar Adali}
+\degreemonth{March}
+\degreeyear{2014} 
+\dissertation
+\doctorphilosophy
+\copyrightnotice
+
+
+
+% add your chapters, best way is to have separate TeX files for each chapter
+%SA: Each chapter has its own Sweave/knitr file, these children documents can be removed by changing "eval" to FALSE
+
+
+<<'child-chapter0.Rnw', child='chapter0.Rnw',eval=TRUE>>=
+@
+
+
+<<'child-chapter1.Rnw', child='chapter1.Rnw',eval=TRUE>>=
+@
+
+
+<<'child-chapter2_related_work.Rnw', child='chapter2_related_work.Rnw',eval=TRUE>>=
+@
+
+
+<<'child-chapter3_MDS.Rnw',child='chapter3_MDS.Rnw',eval=TRUE>>=
+@
+
+
+<<'child-chapter9_Match_test.Rnw', child='chapter9_Match_test.Rnw',eval=TRUE>>=
+@
+
+
+<<'child-chapter4_FidComm.Rnw', child='chapter4_FidComm.Rnw',eval=TRUE>>=
+@
+
+<<'child-chapter14_datamodels.Rnw', child='chapter14_datamodels.Rnw',eval=TRUE>>=
+@
+
+
+<<'child-chapter5_PCA_Procrustes.Rnw', child='chapter5_PCA_Procrustes.Rnw',eval=TRUE>>=
+@
+
+
+<<'child-chapter6_CCA.Rnw', child='chapter6_CCA.Rnw',eval=TRUE>>=
+@
+
+
+<<'child-chapter8_MDS_multmin.Rnw', child='chapter8_MDS_multmin.Rnw',eval=TRUE>>=
+@
+
+
+<<'child-chapter7_Sim_Exp_MatchTest.Rnw', child='chapter7_Sim_Exp_MatchTest.Rnw',eval=TRUE>>=
+@
+
+
+<<'child-chapter10_Graph_Match.Rnw', child='chapter10_Graph_Match.Rnw',eval=FALSE>>=
+@
+
+<<'child-chapter11_Graph_Match.Rnw', child='chapter11-Graph_Match_JOFC_Exp.Rnw',eval=TRUE>>=
+@
+
+<<'child-chapter15_conclusion.Rnw', child='chapter15_conclusion.Rnw',eval=TRUE>>=
+@
+
+
+\include{appendix}
+
+%% REFERENCES
+
+% if you use BIBTEX
+\bibliographystyle{IEEEtran}
+\bibliography{priebe-thesis-JOFC}
+% 
+ \begin{vita}
+% 
+ \begin{wrapfigure}{l}{0pt}
+ \includegraphics[width=2in,height=2.5in,clip,keepaspectratio]{sancarheadshot}
+ \end{wrapfigure}
+
+%Include your brief biography here
+
+ 
+ \end{vita}
+\end{document}

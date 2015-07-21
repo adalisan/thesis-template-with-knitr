@@ -1,0 +1,16 @@
+{
+    "contents" : "\\chapter{An expository problem for Multiview Learning : Match detection}\n\\label{chap:match_detection}\n\\chaptermark{Match detection Task}\n\n We are interested in problems in which the data sources are disparate and the inference task requires that observations from different data sources can be judged to be similar or dissimilar.\n  ",
+    "created" : 1421551156075.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1151983653",
+    "id" : "6DD01A4",
+    "lastKnownWriteTime" : 1421551170,
+    "path" : "/media/DocDrive_mSATA/Sancar/Documents/projects/thesis_template/chapter9_Match_test.Rnw",
+    "project_path" : "chapter9_Match_test.Rnw",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "sweave"
+}

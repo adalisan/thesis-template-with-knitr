@@ -1,0 +1,16 @@
+{
+    "contents" : "\\chapter{Data Models for the Match Detection Task}\n\\label{chap:data_models}\n\\chaptermark{Data Models for the Match Detection Task}\n\n\n",
+    "created" : 1421551271365.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4068835652",
+    "id" : "ECCCE471",
+    "lastKnownWriteTime" : 1421551278,
+    "path" : "/media/DocDrive_mSATA/Sancar/Documents/projects/thesis_template/chapter14_datamodels.Rnw",
+    "project_path" : "chapter14_datamodels.Rnw",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "sweave"
+}

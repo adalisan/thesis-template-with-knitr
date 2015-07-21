@@ -1,0 +1,16 @@
+{
+    "contents" : "\\chapter{Variants of Multidimensional Scaling and Principal Components Analysis}\n\\label{sec:MDS}\n\\chaptermark{Variants of Multidimensional Scaling and  Principal Components Analysis}\n\n\n\n\\section{Multidimensional Scaling}\nMultidimensional Scaling (MDS)~\\cite{CMDS,borg+groenen:1997,duin2005dissimilarity}  is the general term that is used to describe methods to    embed dissimilarities as points in a Euclidean space. \n",
+    "created" : 1421550742149.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3062189103",
+    "id" : "C6F78845",
+    "lastKnownWriteTime" : 1421550788,
+    "path" : "/media/DocDrive_mSATA/Sancar/Documents/projects/thesis_template/chapter3_MDS.Rnw",
+    "project_path" : "chapter3_MDS.Rnw",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "sweave"
+}

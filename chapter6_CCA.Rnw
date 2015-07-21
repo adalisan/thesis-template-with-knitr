@@ -1,0 +1,8 @@
+\chapter{Canonical Correlation Analysis for Data Fusion}
+\label{chap:CCA}
+\chaptermark{Canonical Correlation Analysis for Data Fusion}
+
+\section{Canonical Correlational Analysis on \\ Multidimensional Scaling embeddings\label{sec:CCA}}
+
+Canonical Correlational Analysis is another method for addressing the incommensurability of dissimilarities from different conditions. We will refer to the match detection task in \autoref{chap:match_detection} and the data settings in \autoref{sec:data_settings} to explain this alternative approach.
+

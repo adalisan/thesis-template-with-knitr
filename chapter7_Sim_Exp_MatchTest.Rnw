@@ -1,0 +1,51 @@
+\chapter{Simulations and Experiments}
+\label{sec:simexp_results}
+\chaptermark{Simulations and Experiments}
+
+%Include a figure including four subplots
+
+
+\begin{figure}
+ \centering
+  \captionsetup[subfigure]{labelformat=empty}
+        \begin{subfigure}[b]{0.5\textwidth}        
+               \centerline{\includegraphics[width=\textwidth]{ROC-d-2.pdf}}
+                \caption{d=2}
+                \label{fig:ROC-d-2}
+        \end{subfigure}%
+         %add desired spacing between images, e. g. ~, \quad, \qquad etc. 
+          %(or a blank line to force the subfigure onto a new line)
+        \begin{subfigure}[b]{0.5\textwidth}           
+                  \centerline{\includegraphics[width=\textwidth]{ROC-d-5.pdf}}
+                \caption{d=5}
+                \label{fig:ROC-d-5}
+        \end{subfigure}      
+        %add desired spacing between images, e. g. ~, \quad, \qquad etc.    %(or a blank line to force the subfigure onto a new line)
+        \begin{subfigure}[b]{0.47\textwidth}             
+               \includegraphics[width=\textwidth]{ROC-d-7.pdf}
+                \caption{d=7}
+                \label{fig:ROC-d-7}
+        \end{subfigure}          
+               \begin{subfigure}[b]{0.47\textwidth}
+                \centering
+               \includegraphics[width=\textwidth]{ROC-d-10.pdf}
+                \caption{d=10}
+                \label{fig:ROC-d-10}
+        \end{subfigure}
+         
+        \caption{Effect of the $d$ parameter on the ROC curves}
+        \label{fig:ROC-d}
+
+\end{figure}
+
+\begin{center}
+\begin{figure}
+
+                \centering
+               \includegraphics[scale=0.75]{ROC-d-15.pdf}
+                \caption{Effect of the $d$ parameter on the ROC curves,d=15}
+                \label{fig:ROC-d-15}
+       
+\end{figure}
+\end{center}
+

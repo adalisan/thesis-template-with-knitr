@@ -1,0 +1,8 @@
+\chapter{Conclusion}
+\label{sec:conclusion}
+\chaptermark{Conclusion}
+
+\section{Conclusion}
+
+Our investigations began with a match detection problem where the data from disparate sources were available in dissimilarity representation. We formulated a joint embedding method to render the disparate data commensurate and applied the method to inference tasks such as match detection and graph matching. We introduced two criteria, fidelity and commensurability, that are essential for any inference task that uses such data. We investigated the tradeoff between fidelity and commensurability and its relation to the weighted raw stress criterion for MDS.
+

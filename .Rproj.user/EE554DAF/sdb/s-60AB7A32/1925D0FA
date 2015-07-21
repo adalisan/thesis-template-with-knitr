@@ -1,0 +1,16 @@
+{
+    "contents" : "\\chapter{The Joint Optimization of Fidelity and Commensurability  solution \\\\ to Seeded Graph Matching}\n\\label{sec:sgm-jofc}\n\\chaptermark{Seeded Graph Matching and JOFC}\n\n\\section{Overview}\nWe first explain the relevance of the JOFC approach to the graph matching problem. The task of finding vertex correspondences is similar to  detecting matched pairs\\ref{chap:match_detection} in that both of the tasks require the quantification of a distance between vertex pairs in different graphs. A joint commensurate representation of the vertices of the two graphs  can be used to compute these distances between vertex pairs.\n",
+    "created" : 1421549048188.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1415677596",
+    "id" : "1925D0FA",
+    "lastKnownWriteTime" : 1421551210,
+    "path" : "/media/DocDrive_mSATA/Sancar/Documents/projects/thesis_template/chapter11-Graph_Match_JOFC_Exp.Rnw",
+    "project_path" : "chapter11-Graph_Match_JOFC_Exp.Rnw",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "sweave"
+}

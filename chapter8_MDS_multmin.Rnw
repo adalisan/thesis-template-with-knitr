@@ -1,0 +1,793 @@
+\chapter{Multiple Minima in  Multidimensional Scaling }
+\label{sec:MultMinima}
+\chaptermark{Multiple Minima in  Multidimensional Scaling}
+
+
+The approximate values of the dissimilarity matrix is shown in \autoref{table:diss_mat}.
+
+\begin{table}[ht]
+\centering
+\ttfamily
+\begin{tabular}{r|rrrrrrr}
+  \hline
+ & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ 
+  \hline
+  1 & 0.00 & 1.00 & 1.41 & 1.00 & 0.71 &1.00 & 1.00  \\ 
+  2 & 1.00 & 0.00 & 1.00 & 1.41 & 0.71 & 0.00 & 0.01 \\ 
+  3 & 1.41 & 1.00 & 0.00 & 1.00 & 0.71 & 1.00 & 1.00  \\ 
+  4 & 1.00 & 1.41 & 1.00 & 0.00 & 0.71 & 0.01 & 0.00  \\ 
+  5 & 0.71 & 0.71 & 0.71 & 0.71 & 0.00 & 0.71 & 0.71   \\ 
+  6 & 1.00 & 0.00 & 1.00 & 0.01 & 0.71 & 0.00 & 1.41  \\ 
+  7 & 1.00 & 0.01 & 1.00 & 0.00 & 0.71 & 1.41 & 0.00  \\ 
+  
+   \hline
+\end{tabular}
+
+\caption{The entries of the dissimilarity matrix (rounded to two decimal digits)\label{table:diss_mat}}
+\end{table}
+
+
+
+<<multMinMDS,eval=FALSE,results='hide',tidy=FALSE,echo=FALSE,error=TRUE,cache=TRUE>>=
+verbose=TRUE
+root.dir<-Sys.getenv("PROJECT_DIR")
+setwd(root.dir)
+source("./JOFC_MatchDetect/lib/smacofM.R")
+source("./JOFC_MatchDetect/lib/oosIM.R")
+source("./JOFC_MatchDetect/lib/multipleMinimaTest_fn.R")
+
+
+
+#
+# Create point configuration
+#
+
+library(ggplot2)
+n<-7
+X<-matrix(0,n,2)
+X[,1]<-c(0,1,1,0,0,0,0.5)#1.01)
+X[,2]<-c(0,0,1,1,0,0,0.5)#,0)
+X[5,]<-c(1,0)
+X[6,]<-c(0,1)
+#X[8,]<-c(0,1.0)
+in.sample.ind<-c(1:4,7)#,8)
+d.X<- dist(X)
+
+epsilon <-1E-3
+w <- 0.99
+
+#
+# Perturb Dissimilarity matrix
+#
+i <- 4
+j <- 5
+
+ind <- (n*(i-1) - i*(i-1)/2 + j-i)
+
+d.X[ind]<-d.X[ind]-1.4
+
+i<-2
+j<-6
+ind<-(n*(i-1) - i*(i-1)/2 + j-i)
+
+d.X[ind]<- d.X[ind]-1.4
+#X[5,]<-c(0,1)
+
+
+i<-5
+j<-7
+ind<-(n*(i-1) - i*(i-1)/2 + j-i)
+
+#d.X[ind]<- d.X[ind]+0.707
+
+i<-5
+j<-8
+ind<-(n*(i-1) - i*(i-1)/2 + j-i)
+
+#d.X[ind]<- d.X[ind]-1.4
+
+if (verbose) print(d.X)
+
+init.config<-X
+
+w.vals<-c(0.1,seq(0.2,0.4,0.1),seq(0.41,0.54,0.01),seq(0.55,0.7,0.05),seq(0.75,0.85,0.01),seq(0.90,0.95,0.05),0.99)
+w.vals.sp<-w.vals[c(1,13,14,15,21,26:31,35,36)]
+grid.seq.x<-seq(-0.5,1.5,0.1)
+grid.seq.y<-seq(-0.2,1.6,0.1)
+
+x.grid.len <- length(grid.seq.x)
+y.grid.len <- length(grid.seq.y)
+grid.pts.count<- x.grid.len *y.grid.len 
+
+#
+# Define empty arrays for results
+#
+final.close.to.init.w<-rep(0, length(w.vals))
+
+dir.deriv<-array(0,dim=c(length(w.vals),x.grid.len,length(grid.seq.y),2*n))
+hessian.at.pt<-array(list(c(1,1,2,1)),dim=c(length(w.vals),x.grid.len,y.grid.len))
+sign.hessian.at.pt<-array(0,dim=c(length(w.vals),x.grid.len,y.grid.len))
+stress.at.loc.w <-sign.hessian.at.pt 
+
+min.config.stress.1.w<- rep(0, length(w.vals))
+min.config.stress.2.w<- rep(0, length(w.vals))
+
+
+close.to.init.X5.for.w <- list()
+close.to.init.X6.for.w <- list()
+far.to.init.X5.for.w   <- list()
+far.to.init.X6.for.w   <- list()
+
+
+
+final.coords.x.5.w<-array(0,dim=c(length(w.vals),x.grid.len,y.grid.len))
+final.coords.y.5.w<-array(0,dim=c(length(w.vals),x.grid.len,y.grid.len))
+final.coords.x.6.w<-array(0,dim=c(length(w.vals),x.grid.len,y.grid.len))
+final.coords.y.6.w<-array(0,dim=c(length(w.vals),x.grid.len,y.grid.len))
+config.points.agg<-data.frame(x=numeric(0),y=numeric(0),pt.name=character(0),w=numeric(0))
+
+
+for (w.i in 1:length(w.vals)){
+  
+  stress.at.loc<-array(0,dim=c(x.grid.len,y.grid.len))
+  
+  #Set up weight vector
+  w <- w.vals[w.i]
+  W <- matrix(1-w,n,n)
+  W[5,2] <- W[2,5]<- w
+  W[6,4] <- W[4,6]<- w
+  W[5,7] <- W[7,5]<- 1-w
+  diag(W)<-0
+  
+  
+  W.oos <- W
+  W.oos[in.sample.ind, in.sample.ind]<-0  
+  new.index.order<- c(in.sample.ind,c(5,6))
+  W.oos<-W.oos[new.index.order,new.index.order]
+  
+  
+  
+  in.sample.Bool<-(1:n %in% in.sample.ind)
+  X.embed.1.in <- smacofM(as.matrix(d.X)[in.sample.ind,in.sample.ind],
+                          ndim    = 2,
+                          W       = W[in.sample.ind,in.sample.ind],
+                          init    = init.config[in.sample.Bool,]  	,
+                          verbose = FALSE,
+                          itmax   = 1000,
+                          eps     = 1e-6)
+  
+  X.embed.1.oos <- oosIM(D=as.matrix(d.X),
+                         X=X.embed.1.in,
+                         init= init.config[!in.sample.Bool,],
+                         W=W.oos,
+                         verbose = FALSE,
+                         itmax   = 1000,
+                         eps     = 1e-6,
+                         bwOos = TRUE,
+                         isWithin = ifelse(in.sample.Bool,1,0) )
+  
+  row.names(X.embed.1.oos)<-NULL
+  row.names(X.embed.1.in)<-NULL
+  X.embed.1.norm <- rbind(X.embed.1.in[1:4,] ,X.embed.1.oos,X.embed.1.in[5:(n-2),]) 
+  if (verbose) print("Init config ")
+  if (verbose) print(X.embed.1.norm)
+  stress <- raw.stress.at(X.embed.1.norm)
+  if (verbose) print("Init config  stress")
+  if (verbose)  print(stress)
+  close.to.init.1<-data.frame(x=numeric(),y=numeric())
+  close.to.init.2<-data.frame(x=numeric(),y=numeric())
+  far.to.init.1<-data.frame(x=numeric(),y=numeric())
+  far.to.init.2<-data.frame(x=numeric(),y=numeric())
+  min.stress.1<-100
+  min.stress.2<-100
+  
+  
+  
+  grid.resp<-array(0,dim=c(x.grid.len,y.grid.len))
+  grid.coords<-array(0,dim=c(x.grid.len,y.grid.len))
+  
+  
+  mesh.grid.coords<-meshgrid(grid.seq.x,grid.seq.y)
+  
+  
+  final.coords.x.5<-array(0,dim=c(x.grid.len,y.grid.len))
+  final.coords.y.5<-array(0,dim=c(x.grid.len,y.grid.len))
+  final.coords.x.6<-array(0,dim=c(x.grid.len,y.grid.len))
+  final.coords.y.6<-array(0,dim=c(x.grid.len,y.grid.len))
+  min.config.1<-matrix(0,n,2)
+  min.config.2<-matrix(0,n,2)
+  
+  for (j in 1:y.grid.len){
+    
+    for (i in 1:x.grid.len){
+      init.config <- X
+      
+      i.x<-grid.seq.x[i]
+      j.y<-grid.seq.y[j]
+      #i.x<-mesh.grid.coords$x[i,j] 
+      #j.y<-mesh.grid.coords$y[i,j] 
+      
+      init.config[5,]<-c(i.x,j.y)
+      init.config[6,]<-c(1-i.x,1-j.y)
+      
+      X.embed.2.in<-smacofM(as.matrix(d.X)[in.sample.ind, in.sample.ind],
+                            ndim    = 2,
+                            W       = W[in.sample.ind,in.sample.ind],
+                            init    = init.config[in.sample.Bool,],
+                            verbose = FALSE,
+                            itmax   = 1000,
+                            eps     = 1e-6)
+      
+      X.embed.2.oos<-oosIM(D = as.matrix(d.X),
+                           X = X.embed.2.in,
+                           init = init.config[!in.sample.Bool,],
+                           
+                           verbose =  FALSE,#(i<=(x.grid.len/2)),
+                           itmax   = 1000,
+                           eps     = 1e-6,
+                           W = W.oos,
+                           bwOos = TRUE,
+                           isWithin = ifelse(in.sample.Bool,1,0))
+      
+      
+      
+      
+      row.names(X.embed.2.oos)<-NULL
+      row.names(X.embed.2.in)<-NULL
+      
+      X.embed.2.norm<- rbind(X.embed.2.in[1:4,] ,X.embed.2.oos,X.embed.2.in[5:(n-2),])		
+      
+      hess.mat<- hessian.mat(X.embed.2.norm,n)
+      hess.mat[hess.mat==0]<-t(hess.mat)[hess.mat==0]
+      
+      hessian.at.pt[[w.i,i,j]]<- as.list(hess.mat)
+      
+      hess.mat<-hess.mat[9:12,9:12]
+      hess.eig<- eigen(hess.mat,symmetric=TRUE,only.values=TRUE)
+      e.vals<- hess.eig$values
+      low.than.thres<- abs(e.vals)<1E-5
+      e.vals[low.than.thres] <-  0 #sign(e.vals[low.than.thres])*1E-5 
+      
+      if (sum(e.vals<0)==0){
+        if (sum((e.vals==0)>0)){
+          sign.hessian.at.pt[w.i,i,j] <- 2
+        } else{
+          sign.hessian.at.pt[w.i,i,j] <- 1 #pos definite
+        }
+      } else if (sum(e.vals>0)==0) {
+        if  (sum((e.vals==0)>0)){
+          sign.hessian.at.pt[w.i,i,j] <- -2 #neg definite
+        } else{
+          sign.hessian.at.pt[w.i,i,j] <- -1 #neg definite
+          
+        }
+        
+      } else{
+        sign.hessian.at.pt[w.i,i,j] <- 0  #neither pos nor neg definite  saddle point
+      }
+      final.coords.x.5[i,j]<-X.embed.2.norm[5,1]
+      final.coords.y.5[i,j]<-X.embed.2.norm[5,2]
+      final.coords.x.6[i,j]<-X.embed.2.norm[6,1]
+      final.coords.y.6[i,j]<-X.embed.2.norm[6,2]
+      #print("X.embed.2.norm")
+      #print(X.embed.2.norm)
+      stress <- sum(as.dist(W)*((dist(X.embed.2.norm)-d.X)^2))
+      stress.unif.wt <- sum(((dist(X.embed.2.norm)-d.X)^2))
+      stress.unif.abs <- sum(abs(dist(X.embed.2.norm)-d.X))
+      #print(stress)
+      #	print(stress.unif.wt)
+      #	print(stress.unif.abs)		
+      if (((X.embed.2.norm[6,2]>0.5)) & 
+            (((X.embed.2.norm[5,1]>X.embed.2.norm[6,1])))) { 
+        #& (sum(X.embed.2.norm[6,]<0.3)==1))
+        
+        
+        grid.resp[i,j]<-1
+        #	print("First Test Point")
+        #	print(X.embed.2.norm[5,])
+        if (stress < min.stress.1) {
+          min.stress.1<-stress
+          if (verbose)	print("Min stress found(real min)")
+          if (verbose) print(X.embed.2.norm)
+          min.config.1<-X.embed.2.norm
+          if (verbose) print(min.stress.1)
+          
+        }
+        close.to.init.1<-rbind(close.to.init.1,X.embed.2.norm[5,])
+        close.to.init.2<-rbind(close.to.init.2,X.embed.2.norm[6,])
+        
+        
+      } else{
+        grid.resp[i,j]<-0
+        #print("First Test Point")
+        if (verbose) print(X.embed.2.norm[5,])		
+        if (stress < min.stress.2){
+          min.stress.2<-stress
+          if (verbose) print("Min stress found(second min)")
+          if (verbose) print(X.embed.2.norm)
+          if (verbose) 	print(min.stress.2)
+          min.config.2<-X.embed.2.norm
+          
+        }
+        far.to.init.1<-rbind(far.to.init.1,X.embed.2.norm[5,])
+        far.to.init.2<-rbind(far.to.init.2,X.embed.2.norm[6,])
+        
+        #} else{
+        #	grid.resp[i,j] <- NA
+      }
+      
+      if (w.i>9) {
+        print("stress")
+        print(stress)
+        print(as.dist(W))
+      }
+      stress.at.loc[i,j]<- stress
+      
+      
+      
+      
+    }
+    
+  }
+  
+  stress.at.loc.w[w.i,,] <-stress.at.loc
+  final.coords.x.5.w[w.i,,]=final.coords.x.5
+  final.coords.x.6.w[w.i,,]=final.coords.x.6
+  final.coords.y.5.w[w.i,,]=final.coords.y.5
+  final.coords.y.6.w[w.i,,]=final.coords.y.6
+  
+  #plot(x=grid.seq.x,y=grid.seq.y, col=grid.resp)
+  #x.coords = [x1 x2 x3 x4 ... x1 x2 x3 x4 ...
+  x.coords <- rep(grid.seq.x,y.grid.len)
+  #y.coords = [y1 y1 y1 y1 ... y2 y2 y2 y2 ...
+  y.coords <- rep(grid.seq.y,each=x.grid.len)
+  #grid.resp<-grid.resp[x.grid.lenA:1,]
+  
+#  if (w %in% w.vals.sp){
+    #if (run.in.linux) {X11()} else {windows()}
+#    plot(x.coords, y.coords,
+         #plot(unmatrix(mesh.grid.coords$x,byrow=FALSE),
+         #     unmatrix(mesh.grid.coords$y,byrow=FALSE),
+#         col=ifelse(unmatrix(grid.resp,byrow=FALSE)==1,"red","black"))
+#  }
+  print("For w.value")
+  print(w)
+  print("Min stress found(real min)")
+  if (verbose) print(min.config.1)
+  print(min.stress.1)
+  print("Min stress found(second min)")
+  if (verbose) print(min.config.2)
+  print(min.stress.2)
+  min.config.stress.1.w[w.i]<-min.stress.1
+  min.config.stress.2.w[w.i]<-min.stress.2
+  
+  
+#   if (!is.vector(close.to.init.1)){
+#     config.points <- cbind(close.to.init.1,rep("X_6",grid.pts.count))
+#     config.points <- rbind(config.points,cbind(close.to.init.2,rep("X_7",grid.pts.count)) )
+#     config.points<- data.frame(x= config.points[,1],y=config.points[,2],pt.name=config.points[,3],w=w.vals[w.i])
+#     config.points.agg <- rbind(config.points.agg,config.points)
+#   }
+#   
+  
+#   if (!is.vector(far.to.init.1)){
+#     config.points <- cbind(far.to.init.1,rep("X_6",grid.pts.count))
+#     config.points <- rbind(config.points,cbind(far.to.init.2,rep("X_7",grid.pts.count)) )
+#     config.points<- data.frame(x= config.points[,1],y=config.points[,2],pt.name=config.points[,3],w=w.vals[w.i])
+#     config.points.agg <- rbind(config.points.agg,config.points)
+#   }
+
+  print("Number of final config close to initial config")
+  print(dim(close.to.init.1)[1])
+  final.close.to.init.w[w.i] <- dim(close.to.init.1)[1]
+  
+  print("Number of final config far to initial config")
+  print(dim(far.to.init.1)[1])
+  min.config.stress.1.w[w.i]<- min.stress.1
+  min.config.stress.2.w[w.i]<- min.stress.2
+  
+  if (plot.in.3d){
+    
+    #if (!w%in%w.vals.sp) rgl.close()
+    
+  }
+  
+  if (nrow(far.to.init.1)==0) { far.to.init.1<-NULL}
+  if (nrow(far.to.init.2)==0) { far.to.init.2<-NULL}
+  if (nrow(close.to.init.1)==0) { close.to.init.1<-NULL}
+  if (nrow(close.to.init.2)==0) { close.to.init.2<-NULL}
+  
+  far.to.init.X5.for.w<- c(far.to.init.X5.for.w, list(far.to.init.1)) 
+  far.to.init.X6.for.w<- c(far.to.init.X6.for.w, list(far.to.init.2))
+  close.to.init.X5.for.w <- c(close.to.init.X5.for.w, list(close.to.init.1))
+  close.to.init.X6.for.w <- c(close.to.init.X6.for.w, list(close.to.init.2)) 
+  print("length(far.to.init.X5.for.w)")
+  print(length(far.to.init.X5.for.w))  
+
+
+}
+@
+
+
+<<plot_final_pts_all_w, eval=FALSE, fig.show='asis',results='hide',echo=FALSE,fig.cap="Embedded Point Pairs ($\\hat{X}_6$ and $\\hat{X}_7$) for all initial configurations for different $w$ values">>=
+library(ggplot2)
+ 
+  all.final.pts.lf <- data.frame(x=numeric(0),y=numeric(0),pt.name=character(0),close.or.far=character(0),w=numeric(0))
+  
+  far.to.init.X5.for.w.array <- array(numeric(0),dim=c(0,3))
+  pt.name.var <- c("X_6","X_7","X_6","X_7")
+  close.or.far.var = c("far","far","close","close")
+  data.list<-list(far.to.init.X5.for.w  ,far.to.init.X6.for.w,
+                  close.to.init.X5.for.w,close.to.init.X6.for.w)
+  
+  for (j in 1:4){
+  pt.coords<- data.list[[j]]
+  pt.name.var.j <- pt.name.var[j]
+  close.or.far.var.j <-close.or.far.var[j]
+  for (w.i in 1:length(w.vals)){
+    final.coords <- pt.coords[[w.i]]
+    
+   
+    if (!is.null(final.coords)){
+      colnames(final.coords)<-c("x","y")
+      num.pts<-nrow(final.coords)
+      new.final.pts.lf <- cbind(final.coords,pt.name=rep(pt.name.var.j,num.pts)
+            ,close.or.far=rep(close.or.far.var.j,num.pts),w=rep(w.vals[w.i],num.pts))
+      all.final.pts.lf <- rbind(all.final.pts.lf ,new.final.pts.lf)
+      
+    }
+  }
+  }
+  
+  
+sub.final.pts.lf.logical<-all.final.pts.lf$w %in% c(0.1,0.5,0.51,0.52,0.8,0.81,0.82,0.84)
+sub.final.pts.lf<- all.final.pts.lf[sub.final.pts.lf.logical,]
+
+all.final.pts.lf$w<- as.factor(all.final.pts.lf$w)
+sub.final.pts.lf$w<- as.factor(sub.final.pts.lf$w)
+
+levels(sub.final.pts.lf$w)<- paste("w = ",levels(sub.final.pts.lf$w))
+g1<-ggplot(sub.final.pts.lf,aes(x=x,y=y,colour=pt.name))+geom_point(alpha = 1/5) +scale_shape(solid = FALSE) + facet_wrap(~w,ncol=2)
+print(g1)
+@
+
+
+<<config_w_ani,eval=FALSE, fig.show='hide',echo=FALSE,out.width='6in',fig.cap="Embedded Point Pairs ($\\hat{X}_6$ and $\\hat{X}_7$) for all initial configurations for different $w$ values">>=
+for (w.it in w.vals){
+sub.final.pts.lf.logical<-all.final.pts.lf$w %in% w.it
+sub.final.pts.lf<- all.final.pts.lf[sub.final.pts.lf.logical,]
+levels(sub.final.pts.lf$w)<- paste("w=",levels(sub.final.pts.lf$w))
+
+g1<-ggplot(sub.final.pts.lf,aes(x=x,y=y,colour=pt.name))+geom_point(alpha = 1/5)+ 
+scale_shape(solid = FALSE) + xlim(-0.1, 1.1)+ylim(-0.1, 1.1) + labs(title=paste("w=", format(w.it,digits=2),collapse = "")) +
+  theme(legend.position="bottom")
+
+print(g1)
+}
+@
+
+
+
+
+
+<<more_2d_3d_plots,eval=FALSE,results='hide',echo=FALSE>>=
+
+
+for (w.i in 1:length(w.vals)){
+  
+  par(pch=1)
+  plot(x=close.to.init.1[,1],y=close.to.init.1[,2],col="red",
+       xlim=c(min(close.to.init.1[,1],close.to.init.2[,1]),max(close.to.init.1[,1],close.to.init.2[,1]))
+       ,ylim=c(min(close.to.init.1[,2],close.to.init.2[,2]),max(close.to.init.1[,2],close.to.init.2[,2])))
+  
+  par(pch=3)
+  points(x=close.to.init.2[,1],y=close.to.init.2[,2],col="blue")
+  title(paste("Final config Close to true config- w=",w,collapse=""))
+  legend("topright",legend=c(expression(X[6]),expression(X[7])),col=c("red","blue"),pch=c(1,3))
+  
+  dev.print(paste(results.dir,"/","true-min-w",w,".png",collapse="",sep=""),device=png,width=600,height=600)
+  fname<-paste(results.dir,"/","true-min-w",w,".pdf",collapse="",sep="")
+  dev.copy2pdf(file=fname)
+  dev.off()
+  
+  #select.x<- sort( sample.int(x.grid.len , 10))
+  select.x<-1:x.grid.len 
+  #select.y <- sort( sample.int(y.grid.len , 10))
+  select.y<-1:y.grid.len 
+  #The indexing (select.x,select.y) is mixed because mesh.grid function generates a matrix 
+  #whose columns are for x coordinates, while for final.coords, rows are for x coordinates
+  
+  #}
+  
+  if(!is.vector(far.to.init.1)){
+    #if (run.in.linux) {X11()} else {windows()}
+    par(pch=1)
+    plot(x=far.to.init.1[,1],y=far.to.init.1[,2],col="red",
+         xlim=c(min(grid.seq.x),max(grid.seq.x))
+         ,ylim=c(min(grid.seq.y),max(grid.seq.y)))
+    par(pch=3)
+    points(x=far.to.init.2[,1],y=far.to.init.2[,2],col="blue")
+    title(paste("Final config Far to true config- w=",w,collapse=""))
+    legend("topright",legend=c(expression(X[6]),expression(X[7])),col=c("red","blue"),pch=c(1,3))
+    
+    dev.print(paste(results.dir,"/","other-min-w",w,".png",collapse="",sep=""),device=png, width=600,height=600)
+    fname<-paste(results.dir,"/","other-min-w",w,".pdf",collapse="",sep="")
+    dev.copy2pdf(file=fname)
+    
+  }
+  
+  print("Number of final config close to initial config")
+  print(dim(close.to.init.1)[1])
+  final.close.to.init.w[w.i] <- dim(close.to.init.1)[1]
+  
+  print("Number of final config far to initial config")
+  print(dim(far.to.init.1)[1])
+  min.config.stress.1.w[w.i]<- min.stress.1
+  min.config.stress.2.w[w.i]<- min.stress.2
+  
+  if (plot.in.3d){
+    
+    #if (!w%in%w.vals.sp) rgl.close()
+    
+  }
+  
+  if (nrow(far.to.init.1)==0) { far.to.init.1<-NULL}
+  if (nrow(far.to.init.2)==0) { far.to.init.2<-NULL}
+  if (nrow(close.to.init.1)==0) { close.to.init.1<-NULL}
+  if (nrow(close.to.init.2)==0) { close.to.init.2<-NULL}
+  
+  far.to.init.X5.for.w<- c(far.to.init.X5.for.w, list(far.to.init.1)) 
+  far.to.init.X6.for.w<- c(far.to.init.X6.for.w, list(far.to.init.2))
+  close.to.init.X5.for.w <- c(close.to.init.X5.for.w, list(close.to.init.1))
+  close.to.init.X6.for.w <- c(close.to.init.X6.for.w, list(close.to.init.2)) 
+  print("length(far.to.init.X5.for.w)")
+  print(length(far.to.init.X5.for.w))
+  
+  
+  
+}
+
+
+min.config.stress.w.table<-rbind(min.config.stress.1.w,min.config.stress.2.w)
+
+colnames(min.config.stress.w.table) <- w.vals
+row.names(min.config.stress.w.table) <- c("Local min for real config.","Alternative local min")
+#if (plot.in.3d){ rgl.close()}
+#graphics.off()
+
+
+
+if (create.ani){
+  saveGIF(animate.config.w(),"config_w.gif")
+  saveGIF(animate.final.loc.stress.w(),"final_loc_vals_w.gif")
+  saveMovie(animate.final.loc.stress.w(),movie.name="final_loc_vals_w.mov")
+  #saveVideo(animate.final.loc.stress.w(),movie.name="final_loc_vals_w.avi")
+  
+  open3d(windowRect=c(0,0,480,480))
+  play3d(stress.plot3d,duration=65,dev = rgl.cur(),sign.hessian.at.pt=sign.hessian.at.pt,
+         x.coords=x.coords,y.coords=y.coords,
+         stress.at.loc=stress.at.loc.w,
+         grid.seq.x=grid.seq.x,grid.seq.y=grid.seq.y,w.vals=w.vals,rotate.z.angle=pi/3)
+  
+  movie3d(stress.plot3d,duration=65,dev = rgl.cur(),fps=fps,sign.hessian.at.pt=sign.hessian.at.pt,
+          x.coords=x.coords,y.coords=y.coords,
+          stress.at.loc=stress.at.loc.w,
+          grid.seq.x=grid.seq.x,grid.seq.y=grid.seq.y,w.vals=w.vals, rotate.z.angle=pi/3,
+          dir=file.path(getwd(),"./cache/"),type="mov")
+  
+}
+
+@
+
+\begin{figure}
+\begin{minipage}[b]{0.46\linewidth}
+\centering
+\includegraphics[scale=0.41]{true-min-w-0_1.pdf}
+
+\label{fig:Finalconfig-MultMin-w-0_1_a}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[b]{0.46\linewidth}
+\centering
+\includegraphics[scale=0.41]{other-min-w-0_1.pdf}
+
+\label{fig:Finalconfig-MultMin-w-0_1_b}
+\end{minipage}
+
+\caption{Final configurations for different initial configurations, $w=0.1$ }
+\label{fig:Finalconfig-MultMin-w-0_1}
+
+
+\end{figure}
+
+
+
+
+\begin{figure}
+\begin{minipage}[b]{0.46\linewidth}
+\centering
+\includegraphics[scale=0.41]{true-min-w0_5}
+
+\label{fig:Finalconfig-MultMin-w-0_5_a}
+
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[b]{0.46\linewidth}
+\centering
+\includegraphics[scale=0.41]{other-min-w0_5.pdf}
+
+\label{fig:Finalconfig-MultMin-w-0_5_b}
+
+\end{minipage}
+
+\caption{Final configurations for different initial configurations, $w=0.5$ }
+\label{fig:Finalconfig-MultMin-w-0_5}
+
+\end{figure}
+
+\begin{figure}
+\begin{minipage}[b]{0.46\linewidth}
+\centering
+\includegraphics[scale=0.41]{true-min-w0_8.pdf}
+\label{fig:Finalconfig-MultMin-w-0_8_a}
+
+
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[b]{0.46\linewidth}
+\centering
+\includegraphics[scale=0.41]{other-min-w0_8.pdf}
+\label{fig:Finalconfig-MultMin-w-0_8_b}
+
+
+\end{minipage}
+
+\caption{Final configurations for different initial configurations, $w=0.8$ }
+\label{fig:Finalconfig-MultMin-w-0_8}
+
+\end{figure}
+
+
+
+\begin{figure}
+\begin{minipage}[b]{0.46\linewidth}
+\centering
+\includegraphics[scale=0.41]{true-min-w0_81.pdf}
+
+
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[b]{0.46\linewidth}
+\centering
+\includegraphics[scale=0.41]{other-min-w0_81.pdf}
+
+
+\end{minipage}
+
+\caption{Final configurations for different initial configurations, $w=0.81$ }
+\label{fig:Finalconfig-MultMin-w-0_81}
+
+\end{figure}
+
+
+
+
+\begin{figure}
+\begin{minipage}[b]{0.46\linewidth}
+\centering
+\includegraphics[scale=0.41]{true-min-w0_84.pdf}
+
+\label{fig:figure2-1}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[b]{0.46\linewidth}
+\centering
+\includegraphics[scale=0.41]{other-min-w0_84.pdf}
+
+
+\end{minipage}
+
+\caption{Final configurations for different initial configurations, $w=0.84$ }
+\label{fig:Finalconfig-MultMin-w-0_84}
+
+\end{figure}
+
+
+
+% latex table generated in R 2.15.1 by xtable 1.7-0 package
+% Sat Jan 05 00:54:38 2013
+
+\begin{landscape}
+\begin{table}[ht]
+\def\h#1{\multicolumn{1}{p{3em}}{\mbox{}\hskip0pt #1}}
+\begin{center}
+
+\begin{tabular}{r|rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr}
+\hline
+$w$ & 0.1 & 0.2 & 0.3 & 0.4 & 0.41 & 0.42 & 0.43 & 0.44 & 0.45 & 0.46 & 0.47  \\ 
+\hline
+Local min for real config. & 2.80 & 2.51 & 2.22 & 1.92 & 1.89 & 1.86 & 1.83 & 1.80 & 1.77 & 1.74 & 1.71 \\ 
+Alternative local min & 0.39 & 0.76 & 1.10 & 1.40 & 1.43 & 1.46 & 1.48 & 1.51 & 1.53 & 1.56 & 1.58 \\ 
+\hline
+\end{tabular}
+
+
+\begin{tabular}{r|rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr}
+\hline
+$w$ & 0.48 & 0.49 & 0.5 & 0.51 & 0.52 & 0.53 & 0.54 & 0.55 & 0.6 & 0.65 & 0.7 \\ 
+\hline
+Local min for real config. &  1.68 & 1.65 & 1.62 & 1.59 & 1.56 & 1.53 & 1.50 & 1.47 & 1.32 & 1.17 & 1.01   \\ 
+Alternative local min &  1.60 & 1.63 & 1.65 & 1.67 & 1.69 & 1.71 & 1.73 & 1.74 & 1.81 & 1.82 & 1.81  \\ 
+\hline
+\end{tabular}
+
+
+
+\begin{tabular}{r|rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr}
+\hline
+$w$ & 0.75 & 0.76 & 0.77 & 0.78 & 0.79 & 0.8 & 0.81 & 0.82 & 0.83 & 0.84 & 0.85  \\ 
+\hline
+Local min for real config. &  0.86 & 0.82 & 0.79 & 0.76 & 0.73 & 0.70 & 0.66 & 0.63 & 0.60 & 0.57 & 0.53  \\ 
+Alternative local min &   1.79 & 1.77 & 1.75 & 1.72 & 1.69 & 1.66 & 1.64 & NA & NA & NA & NA \\ 
+\hline
+\end{tabular}
+
+\end{center}
+
+\caption{Final stress values for the two local minima configurations\label{table:stress_val}}
+\end{table}
+
+\end{landscape}
+
+
+
+
+
+\begin{comment}
+%old results
+
+\begin{table}[ht]
+\begin{center}
+\begin{tabular}{rrrrrr}
+\hline
+$w$ value & 0.1 & 0.45 & 0.5 & 0.55 & 0.99 \\ 
+\hline
+Local min for real config. & 2.80 & 1.77 & 1.62 & 1.47 & 0.04 \\ 
+Alternative local min & 0.39 & 1.53 & 1.65 & 1.74 & NA \\ 
+\hline
+\end{tabular}
+\end{center}
+\label{table:stress_val}
+\end{table}
+\end{comment}
+
+<<final_stress_plot,echo=FALSE,warning=FALSE,out.width='\\maxwidth',fig.cap='Final stress values vs $w$ for the two true and alternative local minima configurations'>>=
+w.cache <- c(
+  0.1, 0.2, 0.3, 0.4, 0.41, 0.42, 0.43, 0.44, 0.45, 0.46, 0.47
+ , 0.48, 0.49, 0.5, 0.51, 0.52, 0.53, 0.54, 0.55, 0.6, 0.65, 0.7 
+ , 0.75, 0.76, 0.77, 0.78, 0.79, 0.8, 0.81, 0.82, 0.83, 0.84, 0.85    
+  )
+  min.config.stress.1.w.cache <-  c(
+    2.80, 2.51, 2.22, 1.92, 1.89, 1.86, 1.83, 1.80, 1.77, 1.74, 1.71,  
+    1.68, 1.65, 1.62, 1.59, 1.56, 1.53, 1.50, 1.47, 1.32, 1.17, 1.01,
+    0.86, 0.82, 0.79, 0.76, 0.73, 0.70, 0.66, 0.63, 0.60, 0.57, 0.53  
+  )
+min.config.stress.2.w.cache <- c(
+  0.39, 0.76, 1.10, 1.40, 1.43, 1.46, 1.48, 1.51, 1.53, 1.56, 1.58, 
+  1.60, 1.63, 1.65, 1.67, 1.69, 1.71, 1.73, 1.74, 1.81, 1.82, 1.81,  
+  1.79, 1.77, 1.75, 1.72, 1.69, 1.66, 1.64, NA, NA, NA, NA 
+  
+)
+
+w.len.c<- length(w.cache)
+stress.df<-data.frame (w.ind= 1:w.len.c, true.conf=min.config.stress.1.w.cache,alt.conf=min.config.stress.2.w.cache)
+g2 <- ggplot(data=stress.df,aes(w.ind)) + geom_line(aes(y=true.conf,color="True Config"))+
+  geom_line(aes(y=alt.conf,color="Alternative Config"))+
+  scale_x_discrete("w",labels=w.cache)  + scale_y_continuous("Final Stress Value") +
+  theme(text = element_text(size=13),
+        axis.text.x = element_text(angle=90,hjust=0.5,vjust=0.5),
+           legend.title = element_blank(), #element_text("Config Type")
+           legend.position="bottom") 
+print(g2)
+@
+

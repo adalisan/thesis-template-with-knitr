@@ -1,0 +1,802 @@
+% This template for Sweave/knitr document building was  created by 
+% Sancar Adali
+% This template was originally by R. Jacob Vogelstein
+% Updated on March 1, 2010 by Noah J. Cowan
+
+% Your first task should be to remove packages you are not going to need
+\documentclass[12pt,oneside,final]{thesis}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+
+%\usepackage[utf8]{inputenc}
+\usepackage{cite}
+%
+\usepackage{amssymb,amsmath,amsthm,amscd}
+\usepackage{pgfplots}
+%\usetikzlibrary{plotmarks}
+\pgfplotsset{compat=newest} 
+%\pgfplotsset{plot coordinates/math parser=false}
+%\usetikzlibrary{external}
+%\tikzexternalize % activate!
+%\tikzset{external/system call={pdflatex \tikzexternalcheckshellescape -halt-on-error -interaction=batchmode -jobname "\image" "\texsource"}}
+%\tikzset{external/force remake=true} 
+
+
+\usepackage{graphicx}
+\usepackage{subcaption}
+
+\usepackage{ mathrsfs, bm}
+\usepackage[pdfa]{hyperref}
+
+\usepackage{algorithm2e}
+\usepackage{url}
+\renewcommand{\thesubfigure}{}
+% justifying
+\usepackage{ragged2e}
+
+
+%include the subdirectories where you store the figures, diagrams,graphs  with relative paths
+\graphicspath{{./}{./graphs/}{./figures/}{./../JOFC-GraphMatch/graphs/}{./../JOFC_MatchDetect/graphs/}{./../SeededGraphMatch/graphs/}{./../DataFusion/}{./../DataFusion/graphs/}{./../DataFusion-graphmatch/graphs/}{./../VertexCorrespondence/graphs/}}
+
+\usepackage{fixltx2e}
+\usepackage{array}
+% wrapfig is fragile: use sparingly
+\usepackage{wrapfig} 
+\usepackage{cmbright} %clean look
+%\usepackage{times}  % Use this for ugly fonts
+%\usepackage{ccfonts,eulervm} %Not bad looks nice for serif
+%\usepackage[T1]{fontenc}
+%\usepackage[urw-garamond]{mathdesign}
+%\usepackage{garamondx}
+%\usepackage[lf]{venturis} %% lf option gives lining figures as default; 
+  		  %% remove option to get oldstyle figures as default
+%\usepackage[T1]{fontenc}
+%\usepackage[garamond]{mathdesign}
+%\usepackage[sfdefault]{quattrocento}
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc}
+
+
+
+
+%\usepackage[none]{hyphenat}
+
+\usepackage{verbatim}
+
+\usepackage{multirow}
+
+\usepackage{fancyhdr}    % Use nice looking headers along with the required footer page numbers   
+%\usepackage[hypertex]{hyperref}
+\usepackage{lscape} 
+%Define the header/footer style
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{15pt}
+\lhead{\leftmark}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\fancypagestyle{plain}{% Redefine ``plain'' style for chapter boundaries
+\fancyhf{} % clear all header and footer fields
+\fancyfoot[C]{\thepage} % except the center
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}}
+
+\newtheorem{thm}{Theorem}
+\newtheorem{cor}{Corollary}
+\newtheorem{lem}{Lemma}
+\newtheorem{defn}{Definition}
+
+\usepackage[refpage]{nomencl}
+\renewcommand{\nomname}{List of Notations}
+\renewcommand*{\pagedeclaration}[1]{\unskip\dotfill\hyperpage{#1}}
+%\DeclareTextCommand{\nobreakspace}{T1}{\leavevmode\nobreak\ }
+
+\makenomenclature
+
+\usepackage{makeidx}
+\makeindex
+
+%shorthand commands
+\input{common.tex}
+
+%The following two commands might not be necessary. 
+%They were added during my efforts to create a PDF-1/A compatible pdf file which is required by the JHU library for thesis submissions.
+%PDF compliance
+\input {glyphtounicode-cmr.tex}
+\pdfgentounicode=1
+
+\def\Title{Joint Optimization of Fidelity and Commensurability\\ for Manifold Alignment and Graph Matching}
+\def\Author{Sancar Adali}
+\def\Subject{Dissertation Submitted for Doctoral Degree}
+\def\Keywords{thesis,Multidimensional Scaling,Graph Matching,Fidelity and Commensurability}
+
+%The following sections were added to create a PDF-1/A compatible pdf file including metadata and other features which is required by the JHU library for thesis submissions.
+%***************************************************************************
+% \convertDate converts D:20080419103507+02'00' to 2008-04-19T10:35:07+02:00
+%___________________________________________________________________________
+
+ 
+%\def\pdfcreationdate{2013-03-21T10:35:07+05:00}
+
+%*********
+% XMP data
+%_________
+
+\usepackage{hyperxmp}
+
+
+% ----------------------------------------------
+% Add metadata
+
+\hypersetup{% 
+       pdftitle={\Title},
+       pdfauthor={\Author},
+       pdfauthortitle={},
+       pdfcopyright={Copyright (C) 2014, Sancar Adali},
+       pdfsubject={\Subject},
+       pdfkeywords={\Keywords},
+       pdflicenseurl={},
+       pdfcaptionwriter={},
+       pdfcontactaddress={Johns Hopkins University},
+       pdfcontactcity={Baltimore},
+       pdfcontactpostcode={21218},
+       pdfcontactcountry={USA},
+       pdfcontactemail={sadali1@jhu.edu},
+       pdfcontacturl={http://www.ams.jhu.edu/~adali},
+       pdflang={en},
+       bookmarksopen=true,
+       bookmarksopenlevel=3,
+       hypertexnames=false,
+       linktocpage=true,
+       plainpages=false,
+       breaklinks
+     }
+
+
+
+
+
+
+%\usepackage[T1]{fontenc}
+%SA: This package is not necessary unless you want to create a slideshow-like  plot window like I did.
+\usepackage{animate}
+%\tolerance=10000
+
+%\makeglossary % enable the glossary
+% SA: The following package makes subtle corrections to the rendering of the document. See http://www.khirevich.com/latex/microtype/
+%\usepackage[protrusion=true,final,tracking=true,kerning=true,spacing=true,factor=1100,stretch=10,shrink=10]{microtype}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+
+
+
+\title{Joint Optimization of Fidelity and Commensurability\\ for Manifold Alignment and Graph Matching}
+\author{Sancar Adali}
+\degreemonth{March}
+\degreeyear{2014} 
+\dissertation
+\doctorphilosophy
+\copyrightnotice
+
+
+
+% add your chapters, best way is to have separate TeX files for each chapter
+%SA: Each chapter has its own Sweave/knitr file, these children documents can be removed by changing "eval" to FALSE
+
+
+
+%% FRONTMATTER
+\begin{frontmatter}
+
+% generate title
+\maketitle
+
+\begin{abstract}
+
+
+In this thesis, we investigate how to perform inference in settings in which the data consist of different modalities or views. For effective learning utilizing the information available, data fusion that considers all views of these \emph{multiview} data settings is needed. We also require dimensionality reduction to address the problems associated with high dimensionality, or ``the curse of dimensionality.'' We are interested in the type of information that is available in the multiview data that is essential for the inference task. We also seek to determine the  principles to be used throughout the dimensionality reduction and data fusion steps to provide acceptable task performance. Our research focuses on exploring how these queries and their solutions are relevant to particular data problems of interest.
+
+
+\vspace{1cm}
+
+\noindent Primary Reader: Carey E Priebe\\
+Secondary Reader: Donniell E Fishkind
+
+\end{abstract}
+
+%\begin{acknowledgment}
+
+
+
+%\end{acknowledgment}
+
+\begin{dedication}
+This thesis is dedicated to myself because I did all the hard work and to my family who supported me in every way, especially my mother, from whom I inherit my love of science. 
+
+\end{dedication}
+
+% generate table of contents
+\tableofcontents
+
+% generate list of tables
+\listoftables
+
+% generate list of figures
+\listoffigures
+
+
+\printnomenclature
+
+\end{frontmatter}
+
+
+
+\chapter{Introduction}
+\label{sec:intro}
+\chaptermark{Introduction:  Matched Data and Data Fusion}
+
+
+\section{Data Settings}
+
+
+ It is a challenge to perform a tractable analysis on data obtained from disparate sources (such as multiple sensors). The increasing variety of sensor technologies and the large number of sensors introduce challenges but also hold promise for effective inference. One of our contributions is the development of well-defined simple settings that provide intuition about the right approaches to data fusion and lead to the development of  inference methods that are  useful in practice.
+ 
+ 
+\begin{figure}
+\centering
+\includegraphics[scale=0.75]{gen-model-orig-proj.pdf}
+\caption{Multiple Sensor setting \label{fig:gen-model}}
+\end{figure}
+
+ Our world view of data fusion from multiple sensors is depicted in \autoref{fig:gen-model}. We refer to the entities of interest for pattern recognition as \emph{objects}. These might be real objects or abstract concepts. The data consist  of measurements for a collection of these objects.
+
+ We assume that these objects lie in some ``object'' space $\Xi$ and that each sensor has another ``view'' of the objects. The measurements recorded by the $i^{th}$ sensor lie in some ``measurement space'' $\Xi_i$. The usual approach in pattern 
+recognition is to use feature extractors on the spaces for a feature representation in Euclidean space and to use classical pattern recognition tools for the exploitation task. The alternative approach is to acquire the dissimilarities between the group of objects and use them   either to find an embedding in a low-dimensional Euclidean space for which classic statistical tools are available for inference or to use dissimilarity-based versions of pattern recognition tools~\cite{duin2005dissimilarity}. 
+We use the embedding approach  so  that we avoid the ``curse of dimensionality'' with the low embedding dimension, allowing us to still use classic statistical tools. Additionally, the embeddings of dissimilarities from different conditions need to be ``commensurate'' so that sensor measurements can be compared in a meaningful way (i.e., the degree of (dis)similarity can be inferred) or jointly used in inference. This is accomplished by maps $\rho_k,\onespace k=1,\ldots,K$ from measurement spaces $\Xi_k$ to a low-dimensional commensurate space $\mathcal{X}$, visualized in \autoref{fig:gen-model}. Learning these maps from data is an important part of our novel approach.
+\label{sec:data}
+
+\subsection{Exploitation Task\label{subsec:expl_task}}
+Data fusion is a very general concept, and here, we will clarify the specific meaning of data fusion and the setting that we have in mind.  The exploitation task in which we are interested might involve (perhaps notional) complex objects or abstract entities that are not practically representable. The objects are members of a (perhaps notional) space called ``object'' space, $\Xi$ in \autoref{fig:gen-model}. We will extract different ``views'', ``measurements'', or ``data modalities'' from these objects (which we will refer to as ``conditions''), and these observations will be elements of the measurement space for those conditions ($\Xi_k$ for $k^{th}$ condition). Each  of the objects will have an observation in each of the different conditions, and the corresponding observations across different conditions will be ``matched''. Given new observations from these different conditions, is it possible
+ to determine whether they are ``matched''? If a group of  observations from each condition are ``matched'' to each other but the specific correspondences are unknown, is it possible to find the true correspondences? Different approaches are proposed in this dissertation to address these questions.
+\label{subsec:task}
+
+
+
+\section{Dissimilarity representation\label{sec:dissim_repr}}
+ Significant progress been made in the theory and applications of pattern recognition, particularly in problem settings in which the data are available or assumed to be available as vectors in metric spaces. There are still many problems for which, due to the nature of the setting, one only has access to dissimilarities, proximities, or distances between measurements or a subjective assessment  of the similarities of objects.  While our approach depends naturally on the representation, the inference task is agnostic about this representation issue. The gap between the two kinds of representation of data can be bridged using various  techniques, such as different kinds of embedding methods, and by computing dissimilarities between entities.
+
+
+ \cite{duin2005dissimilarity} is an excellent resource that compiles the research on learning from dissimilarity-based representation. In the introduction, the authors clarify the distinction between statistical and structural (syntactic) pattern recognition, which was discussed previously in \cite{NadlerSmith1993}. Statistical pattern recognition  addresses the analysis of features, which are  measured values for object attributes. Syntactic pattern recognition uses a relational view of objects for representation. In both cases,  the task of discrimination  can rely on distances (however they are defined). P{\k{e}}kalska and Duin  suggest that dissimilarity measures  are a natural bridge between these types of information, and their applicability to multiple settings motivates our use of dissimilarity representation in information fusion. 
+For feature-based representation, the features are either raw or processed measurements from sensors that observe the objects, and the representation of each object is a single point in the representation space, each dimension corresponding to a feature. Dissimilarity-based representation relies on a dissimilarity measure, a way of quantifying the dissimilarity, proximity, or similarity between any two objects. Preferably, the dissimilarity is \emph{designed for} the inference task at hand. 
+%\cite{Duin} argue this is a reason dissimilarities can be superior, since similarities can encode concepts of class membership directly in class discrimination problems.
+There are multiple ways of comparing entities (some more natural than others), which is the basis for one of the arguments behind our approach to information fusion from disparate data sources, including separate sources of the same modality. When the data come from separate sensors that are of the same type, the same measurements might have different dissimilarity representations according to subjective judgments or different dissimilarity measures. 
+
+\section{Match Detection}
+
+We will now provide a formal description of the problem that was mentioned in \autoref{subsec:expl_task}, which was the initial motivation for our investigations, along with a few general remarks.  We will describe this problem in more detail in \autoref{chap:match_detection}.
+
+Consider $n$  distinct objects, which are described with a finite number of measurements. Each of the measurements $x_{ik}$ lies in  the corresponding space $\Xi_k$, and the  measurements $x_{ik}$ are matched for the same $k$ index.
+\[  \begin{array}{cccc}
+        & \Xi_1 & \cdots & \Xi_K\\
+        Object ~ 1 & \bm{x}_{11} & \sim \cdots \sim & \bm{x}_{1K} \\
+        \vdots & \vdots & \vdots & \vdots \\
+        %\text{Object} ~ i & \bm{x}_{i1} & \sim \cdots \sim & \bm{x}_{iK} \\
+        %\vdots & \vdots & \vdots & \vdots \\
+        Object ~ n & \bm{x}_{n1} & \sim \cdots \sim & \bm{x}_{nK}
+      \end{array}      
+\]
+To each pair of measurements $x_{ik},x_{jk}$ in the same space, we can assign a dissimilarity value $\delta_{ijk}=\delta\{x_{ik},x_{jk}\}$, which is  dependent on the space $\Xi_k$. We assume the dissimilarities are symmetric, are always non-negative and that they are positive and 0 according as  the two arguments $x_{ik},x_{jk}$ are different or the same.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%NOTE
+%
+We exploit this training set of  dissimilarities to perform inference on the following exploitation task:
+
+ Given the dissimilarities between  $K$ new measurements/observations ($\bm{y}_{k};\, k \in [K]$) and the previous $n$ objects under $K$ conditions, 
+we test the null hypothesis  that ``these measurements are from the same  object''  against the alternative hypothesis that ``they are not  from the same  object''~\cite{JOFC}:
+    \[
+\begin{array}{l}
+%\hspace{-2em}
+    H_0: \bm{y}_{1} \sim \bm{y}_{2} \sim \cdots \sim \bm{y}_{K}
+ \text{ versus } 
+ H_A: \exists i, j , 1\leq i < j \leq K :\bm{y}_{i} \nsim \bm{y}_{j}  
+\end{array}
+\]
+ The null hypothesis can be restated as the case in which the dissimilarities are \emph{matched}, and the alternative can be restated as the case in which they are \emph{not matched}.
+
+We represent the dissimilarities between $n$ objects in the form  of $n \times n$  dissimilarity matrices $\{\Delta_k;k=1,\ldots,K\}$ where the entries for the $k^{th}$ dissimilarity matrix are $\{\delta^{(k)}_{ij} ;  i=1,\ldots,n;\quad j=1,\ldots,n\}$. For the matching task, we are given $K$  vectors of new dissimilarities  $\{\mathcal{D}_k,k=1 ,\ldots,K\}$ each of which has the entries $\{ \delta_{i,new}^{(k)}; i=1,\ldots, n;\quad k=1,\ldots,K\}  $,  where $\delta_{i,new}^{(k)}$ is the dissimilarity  between  $x_{ik}$ and $y_k$.
+ 
+ 
+For the hypothesis testing problem, we are to compute the test statistics for the objects represented by the given dissimilarities. In order to compute the test statistics, it is necessary to obtain a collection of mappings (one from each condition) to a lower-dimensional space such that new observations from each condition are made commensurate when they are  mapped to this space.
+ These mappings do not need to be explicitly defined; they can be the results of the embedding operation for a particular dataset. If the embedding of the in-sample dissimilarities ($\{\Delta_k;k=1,\ldots,K\}$) results in a unique mapping, out-of-sample (OOS) embeddings could be adjoined to the embedding of in-sample dissimilarities.
+
+A few points should be mentioned to distinguish our approach from related approaches and emphasize the specific challenges of the inference task.
+\begin{remark}
+Because the data sources are ``disparate'', it is not immediately obvious how a dissimilarity between an object in one condition and another object in another condition  can be computed or even meaningfully defined.  In general, these between-\-condition, between-\-object  similarities are not available.
+\label{rem:between_cond_diss}
+\end{remark}
+ \begin{remark}
+ Whether the data are collected in dissimilarity representations for each condition or whether dissimilarities are computed for the observations that are feature observations at each condition is not relevant to our exploitation task. We assume  that dissimilarities for each condition are made available for inference purposes (perhaps by experts in the problem domain). 
+\end{remark}
+
+\begin{remark}
+The exploitation task under consideration is \emph{not} an accurate reconstruction of these feature observations, even if it does exist.
+ If the embeddings are considered good enough to be useful for the inference task, the quality of the embeddings are considered acceptable. Therefore, the quality of our representation will be dependent on the bias-variance tradeoff, where, by choosing a low-dimensional representation, we might be introducing more model bias, but the representation will be more robust with respect to noise, which might result in smaller errors in the inference task.
+\end{remark}
+
+We will use this inference problem to elucidate two concepts that we introduce  in \autoref{chap:FidComm}. Our novel solution to this matching problem will use those concepts as two error criteria to be minimized. We seek the mappings from each condition to the common low-dimensional space that minimize these error criteria and are most appropriate for the inference task.
+
+
+
+\chapter{Related Work}
+\label{chap:RelatedWork}
+\chaptermark{Related Work}
+
+
+
+
+
+\chapter{Variants of Multidimensional Scaling and Principal Components Analysis}
+\label{sec:MDS}
+\chaptermark{Variants of Multidimensional Scaling and  Principal Components Analysis}
+
+
+
+\section{Multidimensional Scaling}
+Multidimensional Scaling (MDS)~\cite{CMDS,borg+groenen:1997,duin2005dissimilarity}  is the general term that is used to describe methods to    embed dissimilarities as points in a Euclidean space. 
+
+
+
+\chapter{An expository problem for Multiview Learning : Match detection}
+\label{chap:match_detection}
+\chaptermark{Match detection Task}
+
+ We are interested in problems in which the data sources are disparate and the inference task requires that observations from different data sources can be judged to be similar or dissimilar.
+  
+
+
+
+
+
+
+
+
+
+
+
+\chapter{Fidelity and Commensurability}
+\label{chap:FidComm}
+\chaptermark{Fidelity and Commensurability}
+
+\section[The concepts of  Fidelity and Commensurability]{The concepts of  Fidelity\\ and Commensurability\label{sec:FidComm_intro}}
+
+For the sake of argument, assume that the source of dissimilarities  are actually observations that are vectors in  Euclidean space. In general, MDS with raw stress will not result in a perfect reconstruction  of the original observations.
+ Note that this point is not relevant to our work, as  the objective of the (joint) embedding is not \emph{perfect} reconstruction, but rather the best embedding for the inference task. What is considered a ``good''  representation will be dependent on how well the original dissimilarities that are relevant to the inference task are preserved. ``Fidelity'' and ``Commensurability'' quantify this preservation of information.
+
+
+\chapter{Data Models for the Match Detection Task}
+\label{chap:data_models}
+\chaptermark{Data Models for the Match Detection Task}
+
+
+
+
+
+
+\chapter{Procrustes Analysis for Data Fusion}
+\label{chap:PoM}
+\chaptermark{Procrustes Analysis}
+
+
+
+\section{Procrustes Analysis}
+Given two configurations of $n$ points in $d$-dimensional Euclidean space, Procrustean methods fit one configuration to the other so that the points align as well as possible in the $\ell_2$-sense. Let us denote the configurations by two $n \times d$ matrices: ${\X}_1$, ${\X}_2$. 
+\begin{thm}
+Let  $\mathbf{Q}=\argmin_{\mathbf{P^T}\mathbf{P}=\mathbf{P}\mathbf{P^T}=\mathbf{I}}\|{\mathbf{X}_1-\mathbf{X}_2}\mathbf{P}\|_{F}^2$ ,   $\mathbf{\tilde{X}}_2= \mathbf{X}_2\mathbf{Q}$, 
+and let  
+$\mathbf{X}=\left[\begin{array}{c}
+\mathbf{X}_1\\
+\mathbf{\tilde{X}}_2
+\end{array}\right]$.
+
+For $w>0$, let $\mathbf{Y}_{w} = \left[\begin{array}{c}
+\mathbf{Y}_1\\
+\mathbf{Y}_2
+\end{array}\right]$  be  a $2n \times p$ configuration matrix obtained by the minimization of 
+$ f(\mcY, M) =(1-w)\left({\sigma{(\mcY_1)}}+{\sigma{(\mcY_2)}}\right)+w\|{\mcY_1-\mcY_2}\|_{F}^2 $ with respect to  $\mcY=\left[\begin{array}{c}
+\mcY_1\\
+\mcY_2
+\end{array}\right]$ with the constraint that $\mcY_1$ and $\mcY_2$ are two $n \times p$ configuration matrices with column means $\bm{0}$. Then, $$lim_{w\rightarrow0}\mathbf{Y}_{w}=\mathbf{X}\mathbf{R}$$ for a $p\times p$ orthogonal matrix $\mathbf{R}$. ($\mathbf{R}$ is a transformation matrix with a rotation and possibly a reflection component.)
+\end{thm}
+ 
+
+
+
+\chapter{Canonical Correlation Analysis for Data Fusion}
+\label{chap:CCA}
+\chaptermark{Canonical Correlation Analysis for Data Fusion}
+
+\section{Canonical Correlational Analysis on \\ Multidimensional Scaling embeddings\label{sec:CCA}}
+
+Canonical Correlational Analysis is another method for addressing the incommensurability of dissimilarities from different conditions. We will refer to the match detection task in \autoref{chap:match_detection} and the data settings in \autoref{sec:data_settings} to explain this alternative approach.
+
+
+
+
+\chapter{Multiple Minima in  Multidimensional Scaling }
+\label{sec:MultMinima}
+\chaptermark{Multiple Minima in  Multidimensional Scaling}
+
+
+The approximate values of the dissimilarity matrix is shown in \autoref{table:diss_mat}.
+
+\begin{table}[ht]
+\centering
+\ttfamily
+\begin{tabular}{r|rrrrrrr}
+  \hline
+ & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ 
+  \hline
+  1 & 0.00 & 1.00 & 1.41 & 1.00 & 0.71 &1.00 & 1.00  \\ 
+  2 & 1.00 & 0.00 & 1.00 & 1.41 & 0.71 & 0.00 & 0.01 \\ 
+  3 & 1.41 & 1.00 & 0.00 & 1.00 & 0.71 & 1.00 & 1.00  \\ 
+  4 & 1.00 & 1.41 & 1.00 & 0.00 & 0.71 & 0.01 & 0.00  \\ 
+  5 & 0.71 & 0.71 & 0.71 & 0.71 & 0.00 & 0.71 & 0.71   \\ 
+  6 & 1.00 & 0.00 & 1.00 & 0.01 & 0.71 & 0.00 & 1.41  \\ 
+  7 & 1.00 & 0.01 & 1.00 & 0.00 & 0.71 & 1.41 & 0.00  \\ 
+  
+   \hline
+\end{tabular}
+
+\caption{The entries of the dissimilarity matrix (rounded to two decimal digits)\label{table:diss_mat}}
+\end{table}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{figure}
+\begin{minipage}[b]{0.46\linewidth}
+\centering
+\includegraphics[scale=0.41]{true-min-w-0_1.pdf}
+
+\label{fig:Finalconfig-MultMin-w-0_1_a}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[b]{0.46\linewidth}
+\centering
+\includegraphics[scale=0.41]{other-min-w-0_1.pdf}
+
+\label{fig:Finalconfig-MultMin-w-0_1_b}
+\end{minipage}
+
+\caption{Final configurations for different initial configurations, $w=0.1$ }
+\label{fig:Finalconfig-MultMin-w-0_1}
+
+
+\end{figure}
+
+
+
+
+\begin{figure}
+\begin{minipage}[b]{0.46\linewidth}
+\centering
+\includegraphics[scale=0.41]{true-min-w0_5}
+
+\label{fig:Finalconfig-MultMin-w-0_5_a}
+
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[b]{0.46\linewidth}
+\centering
+\includegraphics[scale=0.41]{other-min-w0_5.pdf}
+
+\label{fig:Finalconfig-MultMin-w-0_5_b}
+
+\end{minipage}
+
+\caption{Final configurations for different initial configurations, $w=0.5$ }
+\label{fig:Finalconfig-MultMin-w-0_5}
+
+\end{figure}
+
+\begin{figure}
+\begin{minipage}[b]{0.46\linewidth}
+\centering
+\includegraphics[scale=0.41]{true-min-w0_8.pdf}
+\label{fig:Finalconfig-MultMin-w-0_8_a}
+
+
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[b]{0.46\linewidth}
+\centering
+\includegraphics[scale=0.41]{other-min-w0_8.pdf}
+\label{fig:Finalconfig-MultMin-w-0_8_b}
+
+
+\end{minipage}
+
+\caption{Final configurations for different initial configurations, $w=0.8$ }
+\label{fig:Finalconfig-MultMin-w-0_8}
+
+\end{figure}
+
+
+
+\begin{figure}
+\begin{minipage}[b]{0.46\linewidth}
+\centering
+\includegraphics[scale=0.41]{true-min-w0_81.pdf}
+
+
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[b]{0.46\linewidth}
+\centering
+\includegraphics[scale=0.41]{other-min-w0_81.pdf}
+
+
+\end{minipage}
+
+\caption{Final configurations for different initial configurations, $w=0.81$ }
+\label{fig:Finalconfig-MultMin-w-0_81}
+
+\end{figure}
+
+
+
+
+\begin{figure}
+\begin{minipage}[b]{0.46\linewidth}
+\centering
+\includegraphics[scale=0.41]{true-min-w0_84.pdf}
+
+\label{fig:figure2-1}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[b]{0.46\linewidth}
+\centering
+\includegraphics[scale=0.41]{other-min-w0_84.pdf}
+
+
+\end{minipage}
+
+\caption{Final configurations for different initial configurations, $w=0.84$ }
+\label{fig:Finalconfig-MultMin-w-0_84}
+
+\end{figure}
+
+
+
+% latex table generated in R 2.15.1 by xtable 1.7-0 package
+% Sat Jan 05 00:54:38 2013
+
+\begin{landscape}
+\begin{table}[ht]
+\def\h#1{\multicolumn{1}{p{3em}}{\mbox{}\hskip0pt #1}}
+\begin{center}
+
+\begin{tabular}{r|rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr}
+\hline
+$w$ & 0.1 & 0.2 & 0.3 & 0.4 & 0.41 & 0.42 & 0.43 & 0.44 & 0.45 & 0.46 & 0.47  \\ 
+\hline
+Local min for real config. & 2.80 & 2.51 & 2.22 & 1.92 & 1.89 & 1.86 & 1.83 & 1.80 & 1.77 & 1.74 & 1.71 \\ 
+Alternative local min & 0.39 & 0.76 & 1.10 & 1.40 & 1.43 & 1.46 & 1.48 & 1.51 & 1.53 & 1.56 & 1.58 \\ 
+\hline
+\end{tabular}
+
+
+\begin{tabular}{r|rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr}
+\hline
+$w$ & 0.48 & 0.49 & 0.5 & 0.51 & 0.52 & 0.53 & 0.54 & 0.55 & 0.6 & 0.65 & 0.7 \\ 
+\hline
+Local min for real config. &  1.68 & 1.65 & 1.62 & 1.59 & 1.56 & 1.53 & 1.50 & 1.47 & 1.32 & 1.17 & 1.01   \\ 
+Alternative local min &  1.60 & 1.63 & 1.65 & 1.67 & 1.69 & 1.71 & 1.73 & 1.74 & 1.81 & 1.82 & 1.81  \\ 
+\hline
+\end{tabular}
+
+
+
+\begin{tabular}{r|rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr}
+\hline
+$w$ & 0.75 & 0.76 & 0.77 & 0.78 & 0.79 & 0.8 & 0.81 & 0.82 & 0.83 & 0.84 & 0.85  \\ 
+\hline
+Local min for real config. &  0.86 & 0.82 & 0.79 & 0.76 & 0.73 & 0.70 & 0.66 & 0.63 & 0.60 & 0.57 & 0.53  \\ 
+Alternative local min &   1.79 & 1.77 & 1.75 & 1.72 & 1.69 & 1.66 & 1.64 & NA & NA & NA & NA \\ 
+\hline
+\end{tabular}
+
+\end{center}
+
+\caption{Final stress values for the two local minima configurations\label{table:stress_val}}
+\end{table}
+
+\end{landscape}
+
+
+
+
+
+\begin{comment}
+%old results
+
+\begin{table}[ht]
+\begin{center}
+\begin{tabular}{rrrrrr}
+\hline
+$w$ value & 0.1 & 0.45 & 0.5 & 0.55 & 0.99 \\ 
+\hline
+Local min for real config. & 2.80 & 1.77 & 1.62 & 1.47 & 0.04 \\ 
+Alternative local min & 0.39 & 1.53 & 1.65 & 1.74 & NA \\ 
+\hline
+\end{tabular}
+\end{center}
+\label{table:stress_val}
+\end{table}
+\end{comment}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): could not find function "{}ggplot"{}}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in print(g2): object 'g2' not found}}\end{kframe}
+\end{knitrout}
+
+
+
+
+\chapter{Simulations and Experiments}
+\label{sec:simexp_results}
+\chaptermark{Simulations and Experiments}
+
+%Include a figure including four subplots
+
+
+\begin{figure}
+ \centering
+  \captionsetup[subfigure]{labelformat=empty}
+        \begin{subfigure}[b]{0.5\textwidth}        
+               \centerline{\includegraphics[width=\textwidth]{ROC-d-2.pdf}}
+                \caption{d=2}
+                \label{fig:ROC-d-2}
+        \end{subfigure}%
+         %add desired spacing between images, e. g. ~, \quad, \qquad etc. 
+          %(or a blank line to force the subfigure onto a new line)
+        \begin{subfigure}[b]{0.5\textwidth}           
+                  \centerline{\includegraphics[width=\textwidth]{ROC-d-5.pdf}}
+                \caption{d=5}
+                \label{fig:ROC-d-5}
+        \end{subfigure}      
+        %add desired spacing between images, e. g. ~, \quad, \qquad etc.    %(or a blank line to force the subfigure onto a new line)
+        \begin{subfigure}[b]{0.47\textwidth}             
+               \includegraphics[width=\textwidth]{ROC-d-7.pdf}
+                \caption{d=7}
+                \label{fig:ROC-d-7}
+        \end{subfigure}          
+               \begin{subfigure}[b]{0.47\textwidth}
+                \centering
+               \includegraphics[width=\textwidth]{ROC-d-10.pdf}
+                \caption{d=10}
+                \label{fig:ROC-d-10}
+        \end{subfigure}
+         
+        \caption{Effect of the $d$ parameter on the ROC curves}
+        \label{fig:ROC-d}
+
+\end{figure}
+
+\begin{center}
+\begin{figure}
+
+                \centering
+               \includegraphics[scale=0.75]{ROC-d-15.pdf}
+                \caption{Effect of the $d$ parameter on the ROC curves,d=15}
+                \label{fig:ROC-d-15}
+       
+\end{figure}
+\end{center}
+
+
+
+
+
+
+\chapter{The Joint Optimization of Fidelity and Commensurability  solution \\ to Seeded Graph Matching}
+\label{sec:sgm-jofc}
+\chaptermark{Seeded Graph Matching and JOFC}
+
+\section{Overview}
+We first explain the relevance of the JOFC approach to the graph matching problem. The task of finding vertex correspondences is similar to  detecting matched pairs\ref{chap:match_detection} in that both of the tasks require the quantification of a distance between vertex pairs in different graphs. A joint commensurate representation of the vertices of the two graphs  can be used to compute these distances between vertex pairs.
+
+
+\chapter{Conclusion}
+\label{sec:conclusion}
+\chaptermark{Conclusion}
+
+\section{Conclusion}
+
+Our investigations began with a match detection problem where the data from disparate sources were available in dissimilarity representation. We formulated a joint embedding method to render the disparate data commensurate and applied the method to inference tasks such as match detection and graph matching. We introduced two criteria, fidelity and commensurability, that are essential for any inference task that uses such data. We investigated the tradeoff between fidelity and commensurability and its relation to the weighted raw stress criterion for MDS.
+
+
+
+\include{appendix}
+
+%% REFERENCES
+
+% if you use BIBTEX
+\bibliographystyle{IEEEtran}
+\bibliography{priebe-thesis-JOFC}
+% 
+ \begin{vita}
+% 
+ \begin{wrapfigure}{l}{0pt}
+ \includegraphics[width=2in,height=2.5in,clip,keepaspectratio]{sancarheadshot}
+ \end{wrapfigure}
+
+%Include your brief biography here
+
+ 
+ \end{vita}
+\end{document}

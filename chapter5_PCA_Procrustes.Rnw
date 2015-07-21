@@ -1,0 +1,27 @@
+
+\chapter{Procrustes Analysis for Data Fusion}
+\label{chap:PoM}
+\chaptermark{Procrustes Analysis}
+
+
+
+\section{Procrustes Analysis}
+Given two configurations of $n$ points in $d$-dimensional Euclidean space, Procrustean methods fit one configuration to the other so that the points align as well as possible in the $\ell_2$-sense. Let us denote the configurations by two $n \times d$ matrices: ${\X}_1$, ${\X}_2$. 
+\begin{thm}
+Let  $\mathbf{Q}=\argmin_{\mathbf{P^T}\mathbf{P}=\mathbf{P}\mathbf{P^T}=\mathbf{I}}\|{\mathbf{X}_1-\mathbf{X}_2}\mathbf{P}\|_{F}^2$ ,   $\mathbf{\tilde{X}}_2= \mathbf{X}_2\mathbf{Q}$, 
+and let  
+$\mathbf{X}=\left[\begin{array}{c}
+\mathbf{X}_1\\
+\mathbf{\tilde{X}}_2
+\end{array}\right]$.
+
+For $w>0$, let $\mathbf{Y}_{w} = \left[\begin{array}{c}
+\mathbf{Y}_1\\
+\mathbf{Y}_2
+\end{array}\right]$  be  a $2n \times p$ configuration matrix obtained by the minimization of 
+$ f(\mcY, M) =(1-w)\left({\sigma{(\mcY_1)}}+{\sigma{(\mcY_2)}}\right)+w\|{\mcY_1-\mcY_2}\|_{F}^2 $ with respect to  $\mcY=\left[\begin{array}{c}
+\mcY_1\\
+\mcY_2
+\end{array}\right]$ with the constraint that $\mcY_1$ and $\mcY_2$ are two $n \times p$ configuration matrices with column means $\bm{0}$. Then, $$lim_{w\rightarrow0}\mathbf{Y}_{w}=\mathbf{X}\mathbf{R}$$ for a $p\times p$ orthogonal matrix $\mathbf{R}$. ($\mathbf{R}$ is a transformation matrix with a rotation and possibly a reflection component.)
+\end{thm}
+ 

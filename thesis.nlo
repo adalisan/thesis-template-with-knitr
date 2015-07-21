@@ -1,0 +1,9 @@
+\nomenclatureentry{a$[n]$@[{$[n]$}]\begingroup The integers from $1$ to $n$\nomeqref {0.0}|nompageref}{i}
+\nomenclatureentry{a$\R$@[{$\R$}]\begingroup The set of reals\nomeqref {0.0}|nompageref}{i}
+\nomenclatureentry{a$\I$@[{$\I$}]\begingroup The indicator function\nomeqref {0.0}|nompageref}{i}
+\nomenclatureentry{a$\Pry[e]$@[{$\Pry[e]$}]\begingroup The probability of the event $e$ \nomeqref {0.0}|nompageref}{i}
+\nomenclatureentry{a$\mcB(n,p)$@[{$\mcB(n,p)$}]\begingroup Binomial Distribution with $n$ trials and success probability $p$  \nomeqref {0.0}|nompageref}{i}
+\nomenclatureentry{a$\Bern(p)$@[{$\Bern(p)$}]\begingroup Bernoulli Distribution with success probability $p$  \nomeqref {0.0}|nompageref}{i}
+\nomenclatureentry{a$\Mat_{m,n}$@[{$\Mat_{m,n}$}]\begingroup The set of real $m \times n$ matrices\nomeqref {0.0}|nompageref}{i}
+\nomenclatureentry{a$\Pi_l$@[{$\Pi_l$}]\begingroup The set of $l \times l$ permutation matrices\nomeqref {0.0}|nompageref}{i}
+\nomenclatureentry{a$\mathcal{DS}_{l}$@[{$\mathcal{DS}_{l}$}]\begingroup The set of $l \times l$ doubly stochastic matrices.\nomeqref {0.0}|nompageref}{i}

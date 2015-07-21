@@ -1,0 +1,16 @@
+{
+    "contents" : "\\chapter{Simulations and Experiments}\n\\label{sec:simexp_results}\n\\chaptermark{Simulations and Experiments}\n\n%Include a figure including four subplots\n\n\n\\begin{figure}\n \\centering\n  \\captionsetup[subfigure]{labelformat=empty}\n        \\begin{subfigure}[b]{0.5\\textwidth}        \n               \\centerline{\\includegraphics[width=\\textwidth]{ROC-d-2.pdf}}\n                \\caption{d=2}\n                \\label{fig:ROC-d-2}\n        \\end{subfigure}%\n         %add desired spacing between images, e. g. ~, \\quad, \\qquad etc. \n          %(or a blank line to force the subfigure onto a new line)\n        \\begin{subfigure}[b]{0.5\\textwidth}           \n                  \\centerline{\\includegraphics[width=\\textwidth]{ROC-d-5.pdf}}\n                \\caption{d=5}\n                \\label{fig:ROC-d-5}\n        \\end{subfigure}      \n        %add desired spacing between images, e. g. ~, \\quad, \\qquad etc.    %(or a blank line to force the subfigure onto a new line)\n        \\begin{subfigure}[b]{0.47\\textwidth}             \n               \\includegraphics[width=\\textwidth]{ROC-d-7.pdf}\n                \\caption{d=7}\n                \\label{fig:ROC-d-7}\n        \\end{subfigure}          \n               \\begin{subfigure}[b]{0.47\\textwidth}\n                \\centering\n               \\includegraphics[width=\\textwidth]{ROC-d-10.pdf}\n                \\caption{d=10}\n                \\label{fig:ROC-d-10}\n        \\end{subfigure}\n         \n        \\caption{Effect of the $d$ parameter on the ROC curves}\n        \\label{fig:ROC-d}\n\n\\end{figure}\n\n\\begin{center}\n\\begin{figure}\n\n                \\centering\n               \\includegraphics[scale=0.75]{ROC-d-15.pdf}\n                \\caption{Effect of the $d$ parameter on the ROC curves,d=15}\n                \\label{fig:ROC-d-15}\n       \n\\end{figure}\n\\end{center}\n\n",
+    "created" : 1421550902680.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3431836955",
+    "id" : "AEAA8A84",
+    "lastKnownWriteTime" : 1421552774,
+    "path" : "/media/DocDrive_mSATA/Sancar/Documents/projects/thesis_template/chapter7_Sim_Exp_MatchTest.Rnw",
+    "project_path" : "chapter7_Sim_Exp_MatchTest.Rnw",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "sweave"
+}

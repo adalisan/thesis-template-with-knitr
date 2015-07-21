@@ -1,0 +1,16 @@
+{
+    "contents" : "\\chapter{Canonical Correlation Analysis for Data Fusion}\n\\label{chap:CCA}\n\\chaptermark{Canonical Correlation Analysis for Data Fusion}\n\n\\section{Canonical Correlational Analysis on \\\\ Multidimensional Scaling embeddings\\label{sec:CCA}}\n\nCanonical Correlational Analysis is another method for addressing the incommensurability of dissimilarities from different conditions. We will refer to the match detection task in \\autoref{chap:match_detection} and the data settings in \\autoref{sec:data_settings} to explain this alternative approach.\n\n",
+    "created" : 1421550879109.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3675359656",
+    "id" : "311A5ED3",
+    "lastKnownWriteTime" : 1421550900,
+    "path" : "/media/DocDrive_mSATA/Sancar/Documents/projects/thesis_template/chapter6_CCA.Rnw",
+    "project_path" : "chapter6_CCA.Rnw",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "sweave"
+}

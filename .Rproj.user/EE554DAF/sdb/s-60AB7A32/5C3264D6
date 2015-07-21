@@ -1,0 +1,16 @@
+{
+    "contents" : "% This chapter is not included in the main document.\n\n\\chapter{Grassmannian Manifold and  Metrics}\n\\label{sec:Grassmann}\n\\chaptermark{Optional running chapter heading}\n\n\n\\section{Grassmannian Manifold}\n\n\n\\section{Metrics in Grassmannian Manifold}\n\n\\section{Relationship with Commensurability}\n",
+    "created" : 1421551217082.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1620837336",
+    "id" : "5C3264D6",
+    "lastKnownWriteTime" : 1421551269,
+    "path" : "/media/DocDrive_mSATA/Sancar/Documents/projects/thesis_template/chapter13_extras.Rnw",
+    "project_path" : "chapter13_extras.Rnw",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "sweave"
+}

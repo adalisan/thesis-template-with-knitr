@@ -1,0 +1,8 @@
+\chapter{Variants of Multidimensional Scaling and Principal Components Analysis}
+\label{sec:MDS}
+\chaptermark{Variants of Multidimensional Scaling and  Principal Components Analysis}
+
+
+
+\section{Multidimensional Scaling}
+Multidimensional Scaling (MDS)~\cite{CMDS,borg+groenen:1997,duin2005dissimilarity}  is the general term that is used to describe methods to    embed dissimilarities as points in a Euclidean space. 

@@ -1,0 +1,16 @@
+{
+    "contents" : "\\chapter{Related Work}\n\\label{chap:RelatedWork}\n\\chaptermark{Related Work}\n\n\n",
+    "created" : 1421550722812.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "502798008",
+    "id" : "FF157F34",
+    "lastKnownWriteTime" : 1421550789,
+    "path" : "/media/DocDrive_mSATA/Sancar/Documents/projects/thesis_template/chapter2_related_work.Rnw",
+    "project_path" : "chapter2_related_work.Rnw",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "sweave"
+}

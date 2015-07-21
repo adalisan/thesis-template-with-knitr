@@ -1,0 +1,16 @@
+
+
+
+
+
+
+
+
+\chapter{Fidelity and Commensurability}
+\label{chap:FidComm}
+\chaptermark{Fidelity and Commensurability}
+
+\section[The concepts of  Fidelity and Commensurability]{The concepts of  Fidelity\\ and Commensurability\label{sec:FidComm_intro}}
+
+For the sake of argument, assume that the source of dissimilarities  are actually observations that are vectors in  Euclidean space. In general, MDS with raw stress will not result in a perfect reconstruction  of the original observations.
+ Note that this point is not relevant to our work, as  the objective of the (joint) embedding is not \emph{perfect} reconstruction, but rather the best embedding for the inference task. What is considered a ``good''  representation will be dependent on how well the original dissimilarities that are relevant to the inference task are preserved. ``Fidelity'' and ``Commensurability'' quantify this preservation of information.

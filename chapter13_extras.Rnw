@@ -1,0 +1,13 @@
+% This chapter is not included in the main document.
+
+\chapter{Grassmannian Manifold and  Metrics}
+\label{sec:Grassmann}
+\chaptermark{Optional running chapter heading}
+
+
+\section{Grassmannian Manifold}
+
+
+\section{Metrics in Grassmannian Manifold}
+
+\section{Relationship with Commensurability}
