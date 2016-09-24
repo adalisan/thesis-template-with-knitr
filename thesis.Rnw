@@ -165,6 +165,7 @@
 %\usepackage[protrusion=true,final,tracking=true,kerning=true,spacing=true,factor=1100,stretch=10,shrink=10]{microtype}
 
 \begin{document}
+%\SweaveOpts{concordance=TRUE}
 
 <<include=FALSE>>=
 opts_chunk$set(concordance=TRUE,eval=FALSE)

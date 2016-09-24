@@ -36,7 +36,7 @@ source("./JOFC_MatchDetect/lib/smacofM.R")
 source("./JOFC_MatchDetect/lib/oosIM.R")
 source("./JOFC_MatchDetect/lib/multipleMinimaTest_fn.R")
 
-
+require(ggplot2)
 
 #
 # Create point configuration
