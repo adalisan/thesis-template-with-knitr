@@ -10,11 +10,45 @@ I would suggest using RStudio so that you can do version control, running simula
 A non-complete list of requirements:
 =================
   *Latex (Miktex can install them automatically)
+  These are some Latex packages that are required for building a pdf (available in MikTex distribution).
 media9
-cmbright
+\usepackage{cmbright} %clean look
+\usepackage{cite}
+\usepackage{amssymb,amsmath,amsthm,amscd}
+\usepackage{pgfplots}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{ mathrsfs, bm}
+\usepackage[pdfa]{hyperref}
+\usepackage{algorithm2e}
+\usepackage{url}
+\usepackage{ragged2e}
+\usepackage{fixltx2e}
+\usepackage{array}
+
+\usepackage{wrapfig} 
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc}
+\usepackage{verbatim}
+\usepackage{multirow}
+\usepackage{fancyhdr}    % Use nice looking headers along with the required footer page numbers   
+
+\usepackage{lscape} 
+\usepackage[refpage]{nomencl}
+\usepackage{makeidx}
+
+%shorthand commands
+\input{common.tex}
+
+
+\usepackage{hyperxmp}
+%\usepackage[T1]{fontenc}
+%SA: This package is not necessary unless you want to create a slideshow-like  plot window like I did.
+\usepackage{animate}
+
 
   *R
 
 ggplot2 
 
-There are some Latex packages that are required for building a pdf (available in MikTex distribution).
+
